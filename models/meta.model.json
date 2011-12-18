@@ -1,0 +1,79 @@
+{
+  "meta" : {
+    "Directory" : {
+      "url":"A(S)",
+      "dialect":"A(S)",
+      "readonly":"A(S)",
+      "actors":"C(ClassFragment/meta::Actor,meta::Actor::directory)" 
+    },
+    "Actor" : {
+      "directory":"R(ClassFragment/meta::Directory)",
+      "_soid":"A(S)",
+      "kind":"E(User,Group)",
+      "name":"A(S)",
+      "url":"A(S)",
+      "owner":"R(ClassFragment/meta::Actor)",
+      "groupsOwned":"R(ClassFragment/meta::Actor,meta::Actor::owner)",
+      "groups": "C(ClassFragment/meta::GroupMembership,meta::GroupMembership::member)",
+      "members": "C(ClassFragment/meta::GroupMembership,meta::GroupMembership::group)",
+      "perspectives":"C(ClassFragment/meta::Perspective,meta:Perspective::owner)"
+    },
+    "GroupMembership": {
+      "member": "R(ClassFragment/meta::Actor,meta::Actor::groups)",
+      "group":"R(ClassFragment/meta::Actor,meta::Actor::members)"
+    },
+    
+    "ModelRepository" : {
+      "url":"A(S)",
+      "dialect":"A(S)",
+      "readonly":"A(S)",
+      "perspectives":"C(ClassFragment/meta::Perspective,meta::Perspective::repository)"
+    },
+    "Perspective" : {
+      "repository":"R(ClassFragment/meta::ModelRepository)",
+      "_soid":"A(S)",
+      "url":"A(S)",
+      "name":"A(S)",
+      "owner":"R(ClassFragment/meta::Actor)",
+      "importDeclarations":"C(ClassFragment/meta::ImportDeclaration,meta::ImportDeclaration::perspective)",
+      "classFragments":"C(ClassFragment/meta::ClassFragment,meta::ClassFragment::perspective)"
+    },
+    "ImportDeclaration" : {
+      "perspective":"R(ClassFragment/meta::Perspective)",
+      "enabled":"A(S)",
+      "classFragment":"R(ClassFragment/meta::ClassFragment)"    
+    },
+    "ClassFragment" : {
+      "perspective":"R(ClassFragment/meta::Perspective)",
+      "_soid":"A(S)",
+      "url":"A(S)",
+      "name":"A(S)",
+      "importDeclarations":"C(ClassFragment/meta::ClassFragment,meta:ImportDeclaration::classFragment)",
+      "target":"R(ClassFragment/meta::ClassFragment)",
+      "extensions":"C(ClassFragment/meta::ClassFragment,meta::ClassFragment::target)",
+      "attributes":"C(ClassFragment/meta::Attribute,meta::Attribute::classFragment)",
+      "referenceTypes":"C(ClassFragment/meta::Type,meta::Type::referencedClassFragment)"
+    },
+    "Attribute" : {
+      "classFragment":"R(ClassFragment/meta::ClassFragment,meta::ClassFragment::attribute)",
+      "_soid":"A(S)",
+      "url":"A(S)",
+      "name":"A(S)",
+      "positionInLabel":"A(I)",
+      "inverseOfC":"R(ClassFragment/meta::Attribute)",
+      "inverseOfR":"C(ClassFragment/meta::Attribute,meta::Attribute::inverseOfC)",
+      "type":"R(ClassFragment/meta::Type)"
+    },
+    "Type" : {
+      "attributes":"C(ClassFragment/meta::Attribute,meta::Attribute::type)",
+      "kind":"E(BasicType,Enumeration,Reference)",
+      "typeExprssion":"A(S)",
+      "cardinality":"E(Single,Multiple)",
+      "referencedClassFragment":"R(ClassFragment/meta::ClassFragment)",
+      "literals":"C(ClassFragment/meta::EnumerationLiteral,meta::EnumerationLiteral::enumeration)"
+    },
+    "EnumerationLiteral" : {
+      "literal":"A(S)"
+    }
+  }
+}

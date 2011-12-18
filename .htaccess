@@ -1,0 +1,30 @@
+RewriteEngine On
+
+#=== Repository ========================================================
+# /<repositoryspec> 
+RewriteRule ^(([a-z0-9]+)\$)?([a-z0-9_]+)/?$ RepositoryServerController.php\?protocol=$2&repname=$3&type=Repository [L,QSA]
+
+
+#=== Perspective =======================================================
+# /<repositoryspec>/Perspective
+RewriteRule ^(([a-z0-9]+)\$)?([a-z0-9_]+)/Perspective/?$ RepositoryServerController.php\?protocol=$2&repname=$3&type=Perspective [L,QSA]
+
+
+# /<repositoryspec>/Perspective/<perspectivesoid>
+RewriteRule ^(([a-z0-9]+)\$)?([a-z0-9_]+)/Perspective/([^/]+)/?$ RepositoryServerController.php\?protocol=$2&repname=$3&type=Perspective&perspective_id=$4 [L,QSA]
+
+
+#=== ClassFragment =====================================================
+# /<repositoryspec>/ClassFragment/<classfragmentsoid>
+RewriteRule ^(([a-z0-9]+)\$)?([a-z0-9_]+)/ClassFragment/([^/]+)/?$ RepositoryServerController.php\?protocol=$2&repname=$3&type=ClassFragment&class_fragment_id=$4 [L,QSA]
+
+#=== Attribute =========================================================
+# /<repositoryspec>/Attribute/<attributesoid>
+RewriteRule ^(([a-z0-9]+)\$)?([a-z0-9_]+)/Attribute/([^/]+)/?$ RepositoryServerController.php\?protocol=$2&repname=$3&type=Attribute&attribute_id=$4 [L,QSA]
+
+#=== InstanceFragment =====================================================
+# /<repositoryspec>/InstanceFragment?...
+RewriteRule ^(([a-z0-9]+)\$)?([a-z0-9_]+)/InstanceFragment/?$ RepositoryServerController.php\?protocol=$2&repname=$3&type=InstanceFragment [L,QSA]
+
+# /<repositoryspec>/InstanceFragment/<instancesoid>/<classfragmentsoid>
+RewriteRule ^(([a-z0-9]+)\$)?([a-z0-9_]+)/InstanceFragment/([^/]*)/([^/]*)/?$ RepositoryServerController.php\?protocol=$2&repname=$3&type=InstanceFragment&soid=$4&class_fragment_id=$5 [L,QSA]
