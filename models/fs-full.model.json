@@ -1,0 +1,39 @@
+{
+  "fs" : {
+    "#name" : "name",
+    "#soid" : "fs",
+    "#owner" : "not-implemented",
+    "#comment" : "File System, that is hierarchical structure of directories and file",
+	"Directory" : {
+	  "#soid" : "fs::Directory", 
+      "fullname" : {
+        "#soid" : "fs::Directory", 
+        "#type" : "A(S)",
+        "#positionInLabel" : -1
+      },
+      "name" : "A(S)",
+      "url" : "A(S)",
+      "parent" : "R(ClassFragment/fs::Directory)",
+      "directories" : "C(ClassFragment/fs::Directory,fs::Directory::parent)",
+      "files" : "C(ClassFragment/fs::File,fs:File::parent)"
+    },
+    "File" : {
+      "#type" : "ClassFragment",
+      "#name" : "File",
+      "#soid" : "fs::File",
+      "#attributes" : {
+        "name" : "A(S)",
+        "url" : "A(S)",
+        "extension" : "A(S)",
+        "size" : "A(I)",
+        "parent" : "R(ClassFragment/fs::Directory)"
+      }        
+    }
+  }
+}
+
+X : {
+ #name = ? X
+ #soid = ? parent :: X
+ #owner = ? 
+ 

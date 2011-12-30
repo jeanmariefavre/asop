@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="databases-so1" default="all" basedir=".">
+	<target name="all">
+	</target>
+
+		
+	  <!-- This tasks is an example of how to create a database. But the driver should be installed. -->
+	  <property name="mysqladmin" value="C:\xampp\mysql\bin\mysqladmin.exe"/>
+	  <property name="mysql.username" value="root"/>
+	  <property name="mysql.pwd" value="xxx"/>
+	  <property name="mysql.dbname" value="mydatabasename"/>
+	 
+	  <!-- mysqladmin is used to create a database. -->
+	  <target name="create_db">
+	    <exec executable="${mysqladmin}">
+	      <arg value="--user=${mysql.username}"/>
+	      <arg value="--password=${mysql.pwd}"/>
+	      <arg value="CREATE"/>
+	      <arg value="${mysql.dbname}"/>
+	    </exec>
+	  </target>
+</project>

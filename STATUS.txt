@@ -1,0 +1,35 @@
+
+ONGOING:
+  implementing getAllPerspectiveIds, getAttribute  
+	  in the interface (done)
+		in the specification
+		  update the wiki https://sites.google.com/site/mkqphd/social-objects/specifications
+			update uml (done?)
+		in the the implementation
+		  JsonRepository
+			  the attribute json format should be reviewed to include the class fragment
+          when alone but not when this is embedded in a class fragment ...
+      AbstractRepository
+        implement loadPerspectiveSoids (should be easy)
+        decide if loadAttribute should go to IModelLoader and how to implement getAttribute
+			Data
+			
+		
+	MetaRepository
+  ProxyRepository
+
+
+==============================================================================
+TODO:
+
+MetaRepository:
+* check the correspondance with UML documentation. ImportDeclaration target a class, not a perspective!
+* ask marc the constraint over the schema
+
+
+AbstractRepository:
+* Is the distinction between ReadOnly and QueryOnly really usefull? It is always possible to list all the elements and filter them on value as a generic implementation. This should certainly be the default behavior. In fact, a good way to proceed is that if child class redefine the query method, they can call the method with the criterion that have not been taken into account.
+* Adding the notion of Type is useful and important to deal in a convinent way with references
+
+
+Historical repository:

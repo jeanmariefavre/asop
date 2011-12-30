@@ -1,0 +1,4 @@
+logs/*
+config/config-*
+local/*
+DIR/data/actor-barney.json

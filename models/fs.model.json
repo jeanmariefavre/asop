@@ -1,12 +1,12 @@
 {
   "fs" : {
-	  "Directory" : {
-		  "fullname" : "A(S)",
+	"Directory" : {
+      "fullname" : "A(S)",
       "name" : "A(S)",
       "url" : "A(S)",
       "parent" : "R(ClassFragment/fs::Directory)",
-			"directories" : "C(ClassFragment/fs::Directory,fs::Directory::parent)",
-			"files" : "C(ClassFragment/fs::File,fs:File::parent)"
+      "directories" : "C(ClassFragment/fs::Directory,fs::Directory::parent)",
+      "files" : "C(ClassFragment/fs::File,fs:File::parent)"
     },
     "File" : {
       "name" : "A(S)",
@@ -17,3 +17,5 @@
     }
   }
 }
+
+ 

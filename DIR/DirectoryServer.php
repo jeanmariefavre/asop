@@ -1,6 +1,6 @@
-<?php
-require_once("../common/Files.php") ;
-require_once("../common/Logger.php") ; 
+<?php  defined('_SOS') or die("No direct access") ;
+require_once(ABSPATH_LIB."Files.php") ;
+require_once(ABSPATH_LIB."Logger.php") ; 
 
 /* Once initialized, a DirectoryServer produce from each query the corresponding http answer */
 
@@ -17,7 +17,6 @@ interface IDirectoryServer {
 abstract class AbstractDirectoryServer implements IDirectoryServer {
   protected /*String!*/ $dialect ;
   protected /*URL!*/ $url ;
-  protected /*Map<String!,String!>!*/ $config ;
   
   protected abstract function /*Json!*/ jsonFromQuery(    
       /*Directory|Actor|Soid*/ $entityType,
@@ -81,23 +80,19 @@ class ActorPerspectivesHardwiredDirectory extends AbstractDirectoryServer
         // In this directory the id of the actor is the same as its name and is the name of the db
         // in the query it can be either available from name or actor_id
         if (isset($parameters["actor_id"])) {
-          $spec = $parameters["actor_id"] ;
+          $actorspec = $parameters["actor_id"] ;
         } else if (isset($parameters["name"])) {
-          $spec = $parameters["name"] ;
+          $actorspec = $parameters["name"] ;
         } else {
-          $spec = "" ;
+          $actorspec = "" ;
         }
-        if ($spec) {
-          $actor = array(
-                 "_server" =>$this->url,
-                 "_type"   =>"User",
-                 "_soid"   =>$spec,
-                 "name"    =>$spec,
-                 "perspectives" => $this->extractPerspectiveUrls($this->defaultRepositoryURL,$spec)
-               ) ;
-          $json = json_encode($actor) ;        
+        if ($actorspec) {
+          $json = $this->jsonActorFromActorSpecification($actorspec) ;
+          if ($json===NULL) {
+            $json = '{"error":"Actor $actorspec, request not recognized"}' ;
+          }
         } else {
-          $json = '{"error":"Actor $userperspectivesspec request not recognized"}' ;
+          $json = '{"error":"Actor $actorspec, request not recognized"}' ;
         }
         break ;
         
@@ -107,25 +102,71 @@ class ActorPerspectivesHardwiredDirectory extends AbstractDirectoryServer
     return $json ;
   }
   
-
-
+  protected function /*Array?*/ jsonActorFromActorSpecification($actorspec) {
+    $fragments = explode("=>",$actorspec) ;    
+    if (count($fragments)==2) {
+      $actorname = $fragments[0] == "" ? "anonymous" : $fragments[0] ;
+      $perspectives = $this->parsePerspectiveUrls($this->defaultRepositoryURL,$fragments[1]) ;
+      $actor = array(
+          "_server" =>$this->url,
+          "_type"   =>"User",
+          "_soid"   =>$actorspec,
+          "name"    =>$actorname,
+          "perspectives" => $perspectives
+      ) ;
+      return json_encode($actor) ;
+    } else if (count($fragments)==1) {
+      $json = file_get_contents(ABSPATH_DIRECTORY."data/actor-".$fragments[0].".json") ;
+      if ($json!==FALSE) {
+        return $json ;
+      } else {
+        return NULL ;
+      }
+    } else {
+      return NULL ;
+    }
+  }
+  
   // parse the specification of perspectives
-  // ; is the serparator between perspective
+  // <perspectives> ::= <perspective> [ " " <perspectives> ]
+  // <perspective> ::= <perspective_soid>
+  //                 | <protocol> "$" <repositoryname>
+  //                 | <protocol> "$" <repositoryname> "$" <perspectivename>
   // 
-  protected function extractPerspectiveUrls($repositorysServerUrl,$spec) {
+  protected function /*Set*<PerspectiveUrl>!*/  parsePerspectiveUrls($repositorysServerUrl, $spec) {
     $perspectiveurls = array() ;
     $perspectivespecs=explode(';',$spec) ;
     foreach ($perspectivespecs as $perspectivespec) {
+      $perspectiveurl = $this->parsePerspectiveUrl($repositorysServerUrl,$perspectivespec) ;
+      if ($perspectiveurl !== NULL) {
+        $perspectiveurls[] = $perspectiveurl  ;
+      }
+    }
+    return $perspectiveurls ;
+  }
+  
+
+  protected function /*PerspectiveUrl?*/ parsePerspectiveUrl($repositorysServerUrl,$perspectivespec) {
+    if ($perspectivespec=="") {
+      return NULL ;
+    } else {
       $segments = explode('$',$perspectivespec) ;
+    
       if (count($segments)==1) {
+    
+        // remote perspective
+        // perspective soid
         $perspectiveurl = str_replace('|','/',$perspectivespec) ;
+    
       } else {
         if (count($segments)==3) {
+    
           // protocol$repository$perspective
           $protocol=$segments[0] ;
           $repositoryname = $segments[1] ;
           $perspectivename = $segments[2] ;
         } else if (count($segments)==2) {
+    
           // protocol$repository
           $protocol=$segments[0] ;
           $repositoryname = $segments[1] ;
@@ -134,22 +175,20 @@ class ActorPerspectivesHardwiredDirectory extends AbstractDirectoryServer
           die("wrong syntax for perspective specification: $perspectivespec ") ;
         }
         $repositoryurl = addToPath($repositorysServerUrl,$protocol.'$'.$repositoryname) ;
-        $perspectiveurl = addToPath($repositoryurl,addToPath("Perspective",$perspectivename)) ; 
+        $perspectiveurl = addToPath($repositoryurl,addToPath("Perspective",$perspectivename)) ;
       }
-      $perspectiveurls[] = $perspectiveurl  ;
+     return $perspectiveurl ; 
     }
-    return $perspectiveurls ;
   }
-
-
 
   
   public function __construct($entityType,$method,$parameters ) {
-    $this->config = parse_ini_file("../config.ini") ;
+    $conffile = ABSPATH_CONFIG."config.php" ;
+    require_once($conffile) ;
 
     $this->dialect="hardwired-multiple-protocol" ;
-    $this->url = $this->config['ROOT_URL'].$this->config['SOCIAL_DIRECTORY_PATH'] ;
-    $this->defaultRepositoryURL = $this->config['ROOT_URL'].$this->config['SOCIAL_REPOSITORY_PATH'] ;
+    $this->url = URL_DIRECTORY ;
+    $this->defaultRepositoryURL = URL_REPOSITORY ;
 
   }
 }

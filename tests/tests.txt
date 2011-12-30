@@ -1,0 +1,50 @@
+// http://localhost/asop/DIR
+// 
+
+
+
+//------------- directory implementations -----------------------
+
+
+http://localhost/asop/DIR/Actor?name=ahmed=>csv$test
+http://localhost/asop/DIR/Actor?name==>csv$test;db$sodb1
+http://localhost/asop/DIR/Actor?name==>csv$test;db$sodb1
+http://localhost/asop/DIR/Actor?name=barney
+http://localhost/asop/DIR/Actor/barney
+
+//------------ repository implementations -----------------------
+
+// csv$test
+http://localhost/asop/csv$test
+http://localhost/asop/csv$test/Perspective/test
+http://localhost/asop/csv$test/ClassFragment/test::people
+http://localhost/asop/csv$test/InstanceFragment?class=test::people
+http://localhost/asop/csv$test/InstanceFragment/1/test::people
+
+
+// sss$meta
+http://localhost/asop/sss$meta
+http://localhost/asop/sss$meta/Perspective/meta
+http://localhost/asop/sss$meta/ClassFragment/meta::Directory
+http://localhost/asop/sss$meta/InstanceFragment?class=meta::Directory
+
+// db$sodb1$_
+http://localhost/asop/db$sodb1
+http://localhost/asop/db$sodb1/Perspective/_
+http://localhost/asop/db$sodb1/ClassFragment/_::dir_actor
+http://localhost/asop/db$sodb1/InstanceFragment?_::rep_attribute::name=name
+http://localhost/asop/db$sodb1/InstanceFragment/sodb1::all_socialobject::1/_::all_socialobject
+http://localhost/asop/db$sodb1/InstanceFragment/sodb1::rep_value::10004::66/_::rep_value
+
+
+// fs$fs
+http://localhost/asop/fs$fs/
+http://localhost/asop/fs$fs/Perspective/fs
+http://localhost/asop/fs$fs/ClassFragment/fs::File
+http://localhost/asop/fs$fs/InstanceFragment?class=fs::Directory
+http://localhost/asop/fs$fs/InstanceFragment/::repositories::csv/fs::Directory
+
+//-------------------------------------------------------------
+// meta$fs_fs
+http://localhost/asop/meta$fs_fs
+// TBC 
