@@ -33,7 +33,7 @@ class MultiProtocolRepositoryServer implements IRepositoryServer {
   protected /*JSonRepository?*/ $jsonRepository ;
   protected /*String!*/ $lastJsonErrorMessage ;
   
-
+  
   protected function /*IJsonRepository!*/ openJsonRepository() {
     $this->logger->log("RepositoryServer::openJsonRepository. protocol='".
                           $this->protocol."', repository='".$this->repositoryName."'") ;
@@ -246,7 +246,7 @@ class MultiProtocolRepositoryServer implements IRepositoryServer {
       require_once($conffile) ;
     } else {
       // execute the config.php file of the extension if it exist.
-      $conffile = ABSPATH_EXTENSIONS_REPOSITORIES.$this->protocol."/config.php" ;
+      $conffile = ABSPATH_EXTENSIONS_REPOSITORIES.$this->protocol."/config-".$this->protocol.".php" ;
       if (isReadableFile($conffile)) {
         require_once($conffile) ;
       } else {

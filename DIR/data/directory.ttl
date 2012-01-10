@@ -1,0 +1,18 @@
+@prefix so: <http://megaplanet.org/sos/schema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+@prefix dirauthor: <http://localhost/asop/DIR/>.
+
+<http://localhost/asop/DIR/Author/barney>
+ rdf:type              so:Actor ;
+ so:server             <http://localhost/asop/DIR/> ; 
+ so:type               "User" ;
+ so:name               "barney" ;
+ so:authorPerspective  <http://localhost/asop/csv$test/Perspective/test> ,
+                       <http://localhost/asop/db$sodb1/Perspective/_> ,
+                       <http://localhost/asop/fs$fs/Perspective/fs>,
+                       <http://46.105.125.53:10000/project-tracking/resource/Perspective/21>,
+                       <http://46.105.125.53:10000/project-tracking/resource/Perspective/31> .
+
+
+
