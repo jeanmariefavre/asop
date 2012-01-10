@@ -5,8 +5,8 @@ require_once(ABSPATH_CORE.'AbstractRepository.php') ;
 require_once(ABSPATH_EXTENSIONS_REPOSITORIES.'sss/StringBasedRepository.php') ;
 
 
-class PhpQueryOnlyRepository extends SimpleStringBasedModelRepository
-                                   implements IQueryOnlyRepository {
+class PhpQueryRepository extends SimpleStringBasedModelRepository
+                                   implements IQueryRepository {
                             
   // getInstanceFragment("x::Concept",instancesoid) is converted to a call to
   //    /*Map(String!,String!)*/ get"Concept"Attributes(instancesoid)
@@ -18,7 +18,7 @@ class PhpQueryOnlyRepository extends SimpleStringBasedModelRepository
     $className = HierarchicalSoidMapper::classFragmentSoidSegment($class_fragment_soid) ;
     $method = 'get'.$className.'Attributes' ;
     if (! method_exists($this,$method)) {
-      $this->log("NativeQueryOnlyRepository::$method does not exist. Null returned instead") ;
+      $this->log("NativeQueryRepository::$method does not exist. Null returned instead") ;
       return NULL ;
     }
     
@@ -27,7 +27,7 @@ class PhpQueryOnlyRepository extends SimpleStringBasedModelRepository
     
     // wrapp the result if any
     if ($nativeattmap === NULL) {
-      $this->log("NativeQueryOnlyRepository::$method($instance_soid) returns NULL") ;
+      $this->log("NativeQueryRepository::$method($instance_soid) returns NULL") ;
       return NULL ;
     } else {
     
@@ -68,7 +68,7 @@ class PhpQueryOnlyRepository extends SimpleStringBasedModelRepository
     // check if the method is available
     $method = 'getAll'.$className."Soids" ;
     if (! method_exists($this,$method)) {
-      $this->log("FileSystemQueryOnlyRepository::$method does not exist. Null returned instead") ;
+      $this->log("FileSystemQueryRepository::$method does not exist. Null returned instead") ;
       return NULL ;
     }
     
@@ -108,7 +108,7 @@ class PhpQueryOnlyRepository extends SimpleStringBasedModelRepository
       if (method_exists($this,$method)) {
         unset($remaining_query[$att]) ;
         $soids = $this->$method($value) ;
-        $this->log("PhpQueryOnlyRepository::$method($value) returns ".count($soids));
+        $this->log("PhpQueryRepository::$method($value) returns ".count($soids));
         $soidsSelectedSoFar = 
           ($soidsSelectedSoFar===NULL) ? $soids : array_intersect($soids,$soidsSelectedSoFar) ;
       }

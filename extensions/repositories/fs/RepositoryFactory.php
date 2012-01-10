@@ -8,8 +8,8 @@ function /*IRepository*/ createRepository($protocol,$repname,$logger) {
   $rooturl=URL_LOCAL_FS_ROOT ;
   assert('strlen($rootdirectory)>=1') ;
   assert('strlen($rooturl)>=1') ;
-  $logger->log("fs::createRepository:: creating FileSystemQueryOnlyRepository") ;                 
-  $repository = new FileSystemQueryOnlyRepository( 
+  $logger->log("fs::createRepository:: creating FileSystemQueryRepository") ;                 
+  $repository = new FileSystemQueryRepository( 
                          URL_REPOSITORY.$protocol.'$'.$repname."/",
                          $rootdirectory,
                          $rooturl,

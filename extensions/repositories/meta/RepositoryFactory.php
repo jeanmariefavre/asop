@@ -26,7 +26,7 @@ function /*IRepository*/ createRepository($protocol,$repname,$logger) {
   }  
   $logger->log("meta::createRepository:: creation of the metamodel repository") ;
 
-  $metaRepository = new MetaQueryOnlyRepository(
+  $metaRepository = new MetaQueryRepository(
                          URL_REPOSITORY.$protocol.'$'.$repname."/",
                          $repositoryWithModel,
                          $perspectivesoids,

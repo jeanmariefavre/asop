@@ -3,13 +3,13 @@
 require_once(ABSPATH_LIB.'Files.php') ;
 require_once(ABSPATH_LIB.'Logger.php') ;
 require_once(ABSPATH_LIB.'Strings.php') ;
-require_once(ABSPATH_EXTENSIONS_REPOSITORIES.'php/PhpQueryOnlyRepository.php') ;
+require_once(ABSPATH_EXTENSIONS_REPOSITORIES.'php/PhpQueryRepository.php') ;
 
 
 define ('META_MODEL_FILE',ABSPATH_MODELS."meta.model.json" ) ;
 
-class MetaQueryOnlyRepository extends PhpQueryOnlyRepository
-                                   implements IQueryOnlyRepository {
+class MetaQueryRepository extends PhpQueryRepository
+                                   implements IQueryRepository {
                                    
   protected /*IModelRepository!*/ $modelRepository ;  
   protected /*Set*<String!>!*/ $modelPerspectiveSoids ;

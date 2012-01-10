@@ -15,8 +15,6 @@ ONGOING:
 			Data
 			
 		
-	MetaRepository
-  ProxyRepository
 
 
 ==============================================================================
@@ -28,8 +26,12 @@ MetaRepository:
 
 
 AbstractRepository:
-* Is the distinction between ReadOnly and QueryOnly really usefull? It is always possible to list all the elements and filter them on value as a generic implementation. This should certainly be the default behavior. In fact, a good way to proceed is that if child class redefine the query method, they can call the method with the criterion that have not been taken into account.
+* Is the distinction between ReadOnly and Query really usefull? It is always possible to list all the elements and filter them on value as a generic implementation. This should certainly be the default behavior. In fact, a good way to proceed is that if child class redefine the query method, they can call the method with the criterion that have not been taken into account.
 * Adding the notion of Type is useful and important to deal in a convinent way with references
 
 
 Historical repository:
+
+ProxyRepository
+
+SPARQLRepository

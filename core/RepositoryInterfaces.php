@@ -5,7 +5,7 @@
 //--- Repository interfaces ------------------------------------------------------
 //--------------------------------------------------------------------------------
 
-interface IReadOnlyModelRepository {
+interface IReadModelRepository {
   public function /*URL!*/                   getURL() ;
   public function /*String!*/                getDialect() ;
   public function /*"false"|"true"*/         isReadOnly() ;
@@ -19,7 +19,7 @@ interface IReadOnlyModelRepository {
 }
 
 
-interface IReadOnlyInstanceRepository {
+interface IReadInstanceRepository {
   public function /*List*<String+!>?*/    getAllInstanceFragmentSoids(
                                                               /*String!*/ $class_fragment_soid) ;
   public function /*IInstanceFragment?*/  getInstanceFragment(/*String!*/ $class_fragment_soid, 
@@ -27,22 +27,22 @@ interface IReadOnlyInstanceRepository {
 }
 
 
-interface IReadOnlyRepository extends IReadOnlyModelRepository, IReadOnlyInstanceRepository {
+interface IReadRepository extends IReadModelRepository, IReadInstanceRepository {
 }
 
-interface IQueryOnlyRepository extends IReadOnlyRepository {
+interface IQueryRepository extends IReadRepository {
   public function /*List*<String!>?*/ queryInstanceFragments(
                                          /*Map<String!,String!>!*/ $query ) ;
 }
 
-interface IModelFixedRepository extends IReadOnlyRepository {
+interface IModelFixedRepository extends IReadRepository {
   public function /*IInstanceFragment?*/ putInstanceFragment( 
                                            /*String!*/ $class_fragment_soid,
                                            /*String!*/ $instance_fragment_soid,
                                            /*Map*<String!,String!>!*/ $attribute_map ) ;
 }
 
-interface IRepository extends IModelFixedRepository, IQueryOnlyRepository {
+interface IRepository extends IModelFixedRepository, IQueryRepository {
   /*TODO*/
 }
 

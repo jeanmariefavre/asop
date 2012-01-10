@@ -20,9 +20,9 @@ define('RAW_PERSPECTIVE_SOID','_') ;
 //--- Model Repository implementations -------------------------------------------
 //--------------------------------------------------------------------------------
 
-class DatabaseReadOnlyModelRepository 
-           extends AbstractCachedReadOnlyModelRepository 
-           implements IReadOnlyModelRepository, IModelLoader {
+class DatabaseReadModelRepository 
+           extends AbstractCachedReadModelRepository 
+           implements IReadModelRepository, IModelLoader {
   protected /*URL!*/ $url ;                                        
   protected /*Database*/ $db ;
   
@@ -106,11 +106,11 @@ class DatabaseReadOnlyModelRepository
 //--------------------------------------------------------------------------------
 
 
-class DatabaseQueryOnlyRepository extends DatabaseReadOnlyModelRepository
-                                          implements IReadOnlyRepository {
+class DatabaseQueryRepository extends DatabaseReadModelRepository
+                                          implements IReadRepository {
   
   
-  // because of non multiple inheritance, we copy the code from AbstractCachedReadOnlyRepository
+  // because of non multiple inheritance, we copy the code from AbstractCachedReadRepository
   // which is anyway not interesting because 
   public function /*List*<String+!>?*/ getAllInstanceFragmentSoids(
                                          /*String!*/ $class_fragment_soid) {
@@ -240,7 +240,7 @@ class DatabaseQueryOnlyRepository extends DatabaseReadOnlyModelRepository
 
 
 
-class DatabaseModelFixedRepository extends DatabaseQueryOnlyRepository implements IModelFixedRepository, IQueryOnlyRepository {
+class DatabaseModelFixedRepository extends DatabaseQueryRepository implements IModelFixedRepository, IQueryRepository {
   public function /*IInstanceFragment?*/ putInstanceFragment( 
                                            /*String!*/ $class_fragment_soid,
                                            /*String!*/ $instance_fragment_soid,
@@ -340,7 +340,7 @@ class DatabasePerspective extends AbstractCachedHierarchicalClassFragmentsPerspe
   }
     
   public function __construct(/*String!*/ $perspective_soid, 
-                              DatabaseQueryOnlyRepository $database_repository) {
+                              DatabaseQueryRepository $database_repository) {
     $this->databaseName = $perspective_soid ;
     parent::__construct(
       $this->databaseName,

@@ -36,23 +36,24 @@ interface IModelLoader {
   //                                                       /*String!*/ $instance_soid ) ;  
   // function /*IClassFragment?*/ loadClassFragment(/*String!*/ $class_fragment_soid) ;
 
-abstract class AbstractCachedReadOnlyModelRepository 
-                   implements IReadOnlyModelRepository, IModelLoader {
+abstract class AbstractCachedReadModelRepository 
+                   implements IReadModelRepository, IModelLoader {
   protected /*Logger!*/ $logger ;               
   protected /*Map*<String!,IPerspective!>!*/ $perspectivesLoaded = array() ;
   protected /*Map*<String!,IClassFragment!>!*/ $classFragmentsLoaded = array() ;
   protected /*Set*<String!>?*/ $perspectiveSoidsLoaded = NULL ;
   
-  // TODO currently this method is not implemented by all implementation.
-  // So fail if it is used at execution time. We remove this implementation later 
-  // to oblige implementation to implement it.
-  public function /*IAttribute?*/ getAttribute(/*�String!*/ $attribute_soid) {
+  // TODO currently this method is not implemented by all implementation provided.
+  // Since it has been added in the interface, we declare it here, and the implementation
+  // that has not been changed will therefore produce an error at execution time.
+  // We will remove this implementation later to oblige implementation to implement it.
+  public function /*IAttribute?*/ getAttribute(/*String!*/ $attribute_soid) {
     $error="getAttribute($attribute_soid) : This method is not implemtend yet";
     $this->log($error) ;
     die ($error) ;
   }
   
-  // TODO currently this method is not implemented by all implementation.
+  // TODO currently this method is not implemented by all implementation. See above.
   // So fail if it is used at execution time. We remove this implementation later 
   // to oblige implementation to implement it.
   public function /*List*<String!>!*/ loadAllPerspectiveSoids() {
@@ -169,9 +170,9 @@ abstract class AbstractCachedReadOnlyModelRepository
 
 
 // Repository with no Instance. Just a Model. Convenient to test things.
-abstract class AbstractCachedReadOnlyInstanceEmptyRepository
-                    extends AbstractCachedReadOnlyModelRepository
-                    implements IReadOnlyRepository {
+abstract class AbstractCachedReadInstanceEmptyRepository
+                    extends AbstractCachedReadModelRepository
+                    implements IReadRepository {
   public function /*List*<String+!>?*/ getAllInstanceFragmentSoids(
                                          /*String!*/ $class_fragment_soid) {
     return array() ;
@@ -208,9 +209,9 @@ interface IModelAndInstanceLoader extends IModelLoader, IInstanceLoader {
 // repository.) Since it does not bring anything it might be usefull ro remove it as well
 // as the InstanceLoader
 
-abstract class AbstractCachedReadOnlyRepository 
-                      extends AbstractCachedReadOnlyModelRepository
-                      implements IReadOnlyRepository, IModelAndInstanceLoader {
+abstract class AbstractCachedReadRepository 
+                      extends AbstractCachedReadModelRepository
+                      implements IReadRepository, IModelAndInstanceLoader {
                       
   // to be implemented
   // public abstract function /*IInstanceFragment?*/ loadInstanceFragment(
@@ -254,7 +255,7 @@ abstract class AbstractCachedReadOnlyRepository
   
 abstract class AbstractPerspective implements IPerspective {
   protected /*String!*/ $_soid ;
-  protected /*AbstractCachedReadOnlyRepository!*/ $repository ;
+  protected /*AbstractCachedReadRepository!*/ $repository ;
   protected /*String!*/ $name  ;
   protected /*IActor?*/ $owner ;
   protected /*List*<IImportDeclaration!>!*/ $importDeclarations ;  
@@ -287,7 +288,7 @@ abstract class AbstractPerspective implements IPerspective {
     $this->importDeclarations[] = $import_declaration ;
   }
   
-  public function __construct($soid,IReadOnlyRepository $repository,$name, $owner=NULL) {
+  public function __construct($soid,IReadRepository $repository,$name, $owner=NULL) {
     assert('strlen($soid)>=1') ;
     assert('strlen($name)>=1') ;
     $this->_soid = $soid ;
@@ -322,7 +323,7 @@ abstract class AbstractCachedClassFragmentsPerspective
       return $this->classFragmentsLoaded ;
     }      
   }
-  public function __construct($soid,AbstractCachedReadOnlyModelRepository $repository,
+  public function __construct($soid,AbstractCachedReadModelRepository $repository,
                               $name,$owner=NULL) {
     assert('strlen($soid)>=1') ;
     assert('strlen($name)>=1') ;
@@ -349,7 +350,7 @@ abstract class AbstractCachedHierarchicalClassFragmentsPerspective
         $this->loadClassFragmentSoidSegments() ) ;             
   }
   
-  public function __construct($soid,/*AbstractCached???*/ IReadOnlyRepository $repository,
+  public function __construct($soid,/*AbstractCached???*/ IReadRepository $repository,
                               $name,$owner=NULL) {
     assert('strlen($soid)>=1') ;
     assert('strlen($name)>=1') ;
@@ -368,7 +369,7 @@ class StoredClassFragmentPerspective extends AbstractPerspective implements IPer
   public function /*Set*<IClassFragment!>!*/ getClassFragments() {
     return $this->classFragmentSet ; 
   }
-  public function __construct($soid,IReadOnlyRepository $repository,$name,$owner=NULL) {
+  public function __construct($soid,IReadRepository $repository,$name,$owner=NULL) {
     assert('strlen($soid)>=1') ;
     assert('strlen($name)>=1') ;
     parent::__construct($soid,$repository,$name,$owner) ;

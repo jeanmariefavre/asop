@@ -165,8 +165,8 @@ class SimpleStringBasedModel implements IStringBasedModel {
 
 
 class SimpleStringBasedModelRepository 
-                  extends AbstractCachedReadOnlyModelRepository 
-                  implements IReadOnlyModelRepository {
+                  extends AbstractCachedReadModelRepository 
+                  implements IReadModelRepository {
   protected /*URL!*/ $url ;
   protected /*SimpleStringBasedModel!*/ $model ;
   
@@ -219,8 +219,8 @@ class SimpleStringBasedModelRepository
 // THE CODE BELOW IS DUPLICATED WITH THE CODE ABOVE BECAUSE OF SIMPLE INHERITANCE
 
 class SimpleStringBasedInstanceEmptyRepository 
-                  extends AbstractCachedReadOnlyInstanceEmptyRepository 
-                  implements IReadOnlyRepository {
+                  extends AbstractCachedReadInstanceEmptyRepository 
+                  implements IReadRepository {
   protected /*URL!*/ $url ;
   protected /*SimpleStringBasedModel!*/ $model ;
   

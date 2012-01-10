@@ -18,8 +18,8 @@ require_once(ABSPATH_LIB.'Csv.php') ;
 //--- Repository implementations -------------------------------------------------
 //--------------------------------------------------------------------------------
 
-class CsvReadOnlyRepository extends AbstractCachedReadOnlyRepository
-                                          implements IReadOnlyRepository {
+class CsvReadRepository extends AbstractCachedReadRepository
+                                          implements IReadRepository {
   protected /*URL!*/ $url ;
   protected /*(URL|DirectoryName)!*/ $repositoryDirectory ;
   
@@ -141,7 +141,7 @@ class CsvPerspective extends AbstractCachedHierarchicalClassFragmentsPerspective
     }
   }
   
-  public function __construct(CsvReadOnlyRepository $csvrepository, $perspectivename) {
+  public function __construct(CsvReadRepository $csvrepository, $perspectivename) {
     $this->perspectiveDirectory = $csvrepository->getRepositoryDirectory()."/".$perspectivename ;
     parent::__construct(
       /* soid = */        $perspectivename,      

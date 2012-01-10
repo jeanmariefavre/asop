@@ -1,0 +1,79 @@
+@prefix 	soo:			<http://localhost/socialobjects/schema.ttl#> .
+
+#---------------------------------------------------------------------------------
+#   Example of Social Object Directory : acme directory
+#---------------------------------------------------------------------------------		
+
+@prefix actor:				<http://localhost/asop/DIR/Actors/> .
+@prefix fleuripers:			<http://46.105.125.53:10000/project-tracking/resource/Perspective/> .
+
+#@prefix perspective:		<http://localhost/asop/Perspective/>.
+#@prefix classfragment:		<http://localhost/asop/ClassFragment/>.
+#@prefix attribute:			<http://localhost/asop/Attribute/>.
+#@prefix type:				<http://localhost/asop/Type/>.
+
+
+#--- Directory description 
+
+<http://localhost/asop/DIR/acme/>
+	rdf:type				soo:Directory ;
+#	soo:directoryURL		<http://localhost/asop/DIR/acme/> ;
+	soo:directoryDialect	"default" ;
+	soo:directoryIsReadOnly	true .
+
+
+#--- Actor descriptions 
+
+actor:n1
+	rdf:type				soo:User ;
+	soo:actorDirectory		<http://localhost/asop/DIR/acme/> ;
+	soo:name				"lisa" .
+
+actor:n40
+	rdf:type				soo:User ;
+	soo:actorDirectory		<http://localhost/asop/DIR/acme/> ;
+	soo:name				"barney" .
+	
+actor:n50
+	rdf:type				soo:User ;
+	soo:actorDirectory		<http://localhost/asop/DIR/acme/> ;
+	soo:name				"maria" .
+	
+actor:n60
+	rdf:type				soo:User ;
+	soo:actorDirectory		<http://localhost/asop/DIR/acme/> ;
+	soo:name				"ahmed" .
+
+actor:n20
+	rdf:type				soo:Group ;
+	soo:actorDirectory		<http://localhost/asop/DIR/acme/> ;
+	soo:groupOwner			actor:n1 ;
+	soo:groupMember			actor:n30 ;
+	soo:name				"acme-corp" .
+	
+actor:n30
+	rdf:type				soo:Group ;
+	soo:actorDirectory		<http://localhost/asop/DIR/acme/> ;
+	soo:groupMember			actor:n50 ,
+							actor:n60 ;
+	soo:groupOwner			actor:n40 ;
+	soo:name				"sw-dev-dept" .
+
+
+#--- Perspective owner description
+
+fleuripers:n2
+	rdf:type				soo:Perspective ;
+	soo:perspectiveOwner	actor:n1 .
+
+fleuripers:n21	
+	rdf:type				soo:Perspective ;
+	soo:perspectiveOwner	actor:n20 .
+
+fleuripers:n31	
+	rdf:type				soo:Perspective ;
+	soo:perspectiveOwner	actor:n30 .
+	
+fleuripers:n61
+	rdf:type				soo:Perspective ;
+	soo:perspectiveOwner	actor:n60 .		

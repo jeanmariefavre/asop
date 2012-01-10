@@ -33,7 +33,7 @@ abstract class AbstractDirectoryServer implements IDirectoryServer {
     echo $jsonanswer ;
   }
 
-  protected function sendHttpHeaders() {
+  protected function /*void*/ sendHttpHeaders() {
     header("Content-Type:	application/json") ;
     header("Access-Control-Max-Age: 86400") ;
     header("Access-Control-Allow-Headers: Content-Type") ; 
@@ -45,8 +45,6 @@ abstract class AbstractDirectoryServer implements IDirectoryServer {
 }
 
 
-/* In this implementation the name of the actor contains the perspective it has access to,
-so nothing is actually stored. */
 
 
 class ActorPerspectivesHardwiredDirectory extends AbstractDirectoryServer
@@ -101,10 +99,16 @@ class ActorPerspectivesHardwiredDirectory extends AbstractDirectoryServer
     }
     return $json ;
   }
-  
-  protected function /*Array?*/ jsonActorFromActorSpecification($actorspec) {
+
+  // <actorspec> ::=   <actorname> 
+  //                 |  => <perspective>
+  //                 | <actorname> => <perspectives>
+  protected function /*Json?*/ jsonActorFromActorSpecification($actorspec) {
     $fragments = explode("=>",$actorspec) ;    
+    
     if (count($fragments)==2) {
+      // [ <actorname> ] => <perspectives>
+      // the set of perspective is given explictely
       $actorname = $fragments[0] == "" ? "anonymous" : $fragments[0] ;
       $perspectives = $this->parsePerspectiveUrls($this->defaultRepositoryURL,$fragments[1]) ;
       $actor = array(

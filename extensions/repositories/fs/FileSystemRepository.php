@@ -3,11 +3,11 @@
 require_once(ABSPATH_LIB.'Files.php') ;
 require_once(ABSPATH_LIB.'Logger.php') ;
 require_once(ABSPATH_LIB.'Strings.php') ;
-require_once(ABSPATH_EXTENSIONS_REPOSITORIES.'php/PhpQueryOnlyRepository.php') ;
+require_once(ABSPATH_EXTENSIONS_REPOSITORIES.'php/PhpRepository.php') ;
 
 define ('FS_MODEL_FILE', ABSPATH_MODELS."fs.model.json") ;
-class FileSystemQueryOnlyRepository extends PhpQueryOnlyRepository
-                                   implements IQueryOnlyRepository {
+class FileSystemQueryRepository extends PhpQueryRepository
+                                   implements IQueryRepository {
                                    
   protected /*Path!*/ $fileSystemRootDirectory ;  
   protected /*URL!*/ $fileSystemRootURL ;

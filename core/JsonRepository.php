@@ -2,8 +2,8 @@
 
 require_once('JsonRepositoryInterfaces.php') ;
 
-class ReadOnlyJsonRepository implements IReadOnlyJsonRepository {
-  protected /*IReadOnlyRepository*/ $repository ;
+class ReadJsonRepository implements IReadJsonRepository {
+  protected /*IReadRepository*/ $repository ;
   
   public function /*Json!*/ getJsonRepository() {
     return json_encode(
@@ -84,12 +84,12 @@ class ReadOnlyJsonRepository implements IReadOnlyJsonRepository {
   
 
   
-  public function __construct(IReadOnlyRepository $repository) {
+  public function __construct(IReadRepository $repository) {
     $this->repository = $repository ;
   }
 }
 
-class QueryOnlyJsonRepository extends ReadOnlyJsonRepository implements IQueryOnlyJsonRepository {
+class QueryJsonRepository extends ReadJsonRepository implements IQueryJsonRepository {
   public function /*Json!*/queryJsonInstanceFragmentSoids(
                                  /*Map<String!,String!>!*/ $query ) {
     /*List*<String+!>?*/ $soids = $this->repository->queryInstanceFragments($query) ;
@@ -101,19 +101,19 @@ class QueryOnlyJsonRepository extends ReadOnlyJsonRepository implements IQueryOn
         
     } else {
       return json_encode( 
-        array("error"=>__FILENAME__."::QueryOnlyJsonRepository::queryJsonInstanceFragmentSoids: the implementation did not returned a list of soids" ) );
+        array("error"=>__FILENAME__."::QueryJsonRepository::queryJsonInstanceFragmentSoids: the implementation did not returned a list of soids" ) );
     }
     
   }
   
 
-  public function __construct(IQueryOnlyRepository $repository) {
+  public function __construct(IQueryRepository $repository) {
     parent::__construct($repository) ;
   }
 }
 
 
-class SchemaFixedJsonRepository extends    QueryOnlyJsonRepository
+class SchemaFixedJsonRepository extends    QueryJsonRepository
                                 implements ISchemaFixedJsonRepository  { 
                                 
   public /*true|null*/ function putJsonInstanceFragment(/*Json!*/ $json_instance_fragment ) {

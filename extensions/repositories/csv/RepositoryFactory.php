@@ -2,7 +2,7 @@
 require_once("CsvRepository.php") ;
 
 function /*IRepository*/ createRepository($protocol,$repname,$logger) {
-  $repository = new CsvReadOnlyRepository( 
+  $repository = new CsvReadRepository( 
                        URL_REPOSITORY.$protocol.'$'.$repname."/",
                        ABSPATH_CSV_ROOT,
                        "repository-".$protocol.'$'.$repname.".txt"  ) ;

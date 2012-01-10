@@ -53,10 +53,10 @@ class MultiProtocolRepositoryServer implements IRepositoryServer {
     // wrap the repository in an appropriate JSonWrapper    
     if ($repository instanceof ISchemaFixedRepository ) {
       $this->jsonRepository = new SchemaFixedJsonRepository($repository) ;
-    } else if ($repository instanceof IQueryOnlyRepository) {
-      $this->jsonRepository = new QueryOnlyJsonRepository($repository) ;
-    } else if ($repository instanceof IReadOnlyRepository) {
-      $this->jsonRepository = new ReadOnlyJsonRepository($repository) ;
+    } else if ($repository instanceof IQueryRepository) {
+      $this->jsonRepository = new QueryJsonRepository($repository) ;
+    } else if ($repository instanceof IReadRepository) {
+      $this->jsonRepository = new ReadJsonRepository($repository) ;
     } else {
       $this->jsonError("RepositoryServer:: Cannot open repository "
                        .$this->protocol.":".$this->repositoryName)  ;                       
@@ -183,7 +183,7 @@ class MultiProtocolRepositoryServer implements IRepositoryServer {
               // InstanceFragment?db::table::att1=pat1& ...
               
               // check if the json repository handle queries
-              if (! $this->jsonRepository instanceof IQueryOnlyJsonRepository) {
+              if (! $this->jsonRepository instanceof IQueryJsonRepository) {
                 return $this->jsonError("sorry, the repository does not support queries") ;
               } else {
                 $query=array() ;
