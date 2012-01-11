@@ -26,7 +26,7 @@ class DatabaseReadModelRepository
   protected /*URL!*/ $url ;                                        
   protected /*Database*/ $db ;
   
-  // XXX Should be replaced by a SchemaReader
+  // XXX Should be replaced by a SchemaReader in the future
   protected /*DatabaseIntrospector!*/ $databaseIntrospector ;
   
 
@@ -76,7 +76,7 @@ class DatabaseReadModelRepository
     return new DatabaseClassFragment($dbSinglePerspective, $tablename, $tablekeys ) ;
   }
   
-  public function /*IAttribute?*/ getAttribute(/*�String!*/ $attribute_soid) {
+  public function /*IAttribute?*/ getAttribute(/*String!*/ $attribute_soid) {
     $error="getAttribute($attribute_soid) : This method is not implemtend yet in DatabaseRepository.php";
     $this->log($error) ;
     die ($error) ;
@@ -341,11 +341,11 @@ class DatabasePerspective extends AbstractCachedHierarchicalClassFragmentsPerspe
     
   public function __construct(/*String!*/ $perspective_soid, 
                               DatabaseQueryRepository $database_repository) {
-    $this->databaseName = $perspective_soid ;
+    $this->databaseName = $database_repository->getDB()->dbname ;
     parent::__construct(
-      $this->databaseName,
+      $perspective_soid,
       $database_repository,
-      $this->databaseName,
+      $perspective_soid,
       NULL  ); // TODO owner
   }
 }

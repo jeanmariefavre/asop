@@ -7,4 +7,3 @@
 // The framework will first search the configuration file in "config", and if not
 // found, will use this one.
 
-// here we define some constants
