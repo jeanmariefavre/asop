@@ -18,7 +18,7 @@ function withoutOptionalPrefix($str, $prefix) {
 }
 
 // from http://php.net/manual/en/function.strtr.php
-$_TRANSLATE['removeAccents'] = array(
+$_TRANSLATE['removeDiacritics'] = array(
     'Š'=>'S', 'š'=>'s', 'Ð'=>'Dj','Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A',
     'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I',
     'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U',
@@ -31,16 +31,16 @@ $_TRANSLATE['removeAccents'] = array(
 // Added this to handle umlaut in german, but also some other stuff. The rules below are to be checked
 // According to wikipedia the rules depend on the language and and not so precise, so...
 // see http://en.wikipedia.org/wiki/Diaeresis_%28diacritic%29
-// The table below might help in some approximate string matching giving more alternatives than the one in "removeAccents" 
-$_TRANSLATE['alternativeToAccents'] = array(
+// The table below might help in some approximate string matching giving more alternatives than the one in "removeDiacritics" 
+$_TRANSLATE['alternativeToDiacritics'] = array(
     'Ð'=>'D', 'Ä'=>'Ae','Æ'=>'Ae','Ï'=>'Ie', 'Ö'=>'Oe','Ø'=>'O', 'Ü'=>'Ue','ß'=>'Ss',
     'ä'=>'ae','æ'=>'ae','ë'=>'ee','ï'=>'i','ö'=>'oe','ÿ'=>'ye'
 );
-function removeAccents($textWithAccents) {
-  return strtr($textWithAccent,$_TRANSLATE['removeAccents']) ;
+function removeDiacritics($text) {
+  return strtr($text,$_TRANSLATE['removeDiacritics']) ;
 } 
-function alternativeToAccents($textWithAccents) {
-  return strtr($textWithAccent,$_TRANSLATE['alternativeToAccents']) ;
+function alternativeToDiacritics($textWithAccents) {
+  return strtr($text,$_TRANSLATE['alternativeToDiacritics']) ;
 }
 
 
