@@ -208,7 +208,7 @@ function /*NestedArray*/ _arrayFromAttribute( /*IAttribute!*/ $attribute ) {
   $attarray = _arrayFromISocialObject($attribute) ;
   $attarray["name"]=$attribute->getName() ;
   $attarray["positionInLabel"]=$attribute->getPositionInLabel() ;
-  $attarray["type"]=$attribute->getType() ;
+  $attarray["type"]=$attribute->getTypeExpression() ;
   return $attarray ;
 }
       

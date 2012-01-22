@@ -528,7 +528,7 @@ class StandardAttribute implements IAttribute {
   protected /*String!*/ $_soid ;
   protected /*String!*/ $name ;
   protected /*IClassFragment!*/ $classFragment ;
-  protected /*String!*/ $type ;
+  protected /*TypeDescription!*/ $typeDescription ;
   protected /*Integer>=-1*/ $positionInLabel ;
   
   public function /*Logger!*/ log($message) {
@@ -549,9 +549,35 @@ class StandardAttribute implements IAttribute {
   public function /*IClassFragment*/ getClassFragment() {
     return $this->classFragment ;
   }
-  public function /*String!*/ getType() {
-    return $this->type ;
+  public function /*TypeExpression!*/ getTypeExpression() {
+    return generateTypeExpression($this->typeDescription) ;
   }
+  public function /*TypeKind!*/ getTypeKind() {
+    return $this->typeDescription['kind'] ;
+  }
+  public function /*Soid?*/ getInverseAtributeSoid() {
+    if (isset($this->typeDescription['inverse'])) {
+      return $this->typeDescription['inverse'] ;
+    } else {
+      return NULL ;  
+    }
+  }
+  public function /*List+<String!>?*/ getLiterals() {
+    if (isset($this->typeDescription['literals'])) {
+      return $this->typeDescription['literals'] ;
+    } else {
+      return NULL ;
+    }
+  }
+
+  public function /*String?*/ getBaseTypeString() {
+    if (isset($this->typeDescription['inverse'])) {
+      return $this->typeDescription['inverse'] ;
+    } else {
+      return NULL ;
+    }
+  }
+  
   public function /*Integer>=-1*/ getPositionInLabel() {
     return $this->positionInLabel ;
   }
@@ -559,20 +585,109 @@ class StandardAttribute implements IAttribute {
   public function __construct( /*String!*/ $soid,
                                IClassFragment $classfragment,
                                /*String!*/ $name,
-                               /*String!*/ $type="A(S)",
+                               /*TypeExpression!*/ $typeExpression="A(S)",
                                /*Integer>=-1*/ $position=-1) {
     assert('strlen($soid)>=1') ;
     assert('strlen($name)>=1') ;
-    assert('strlen($type)>=1') ;
+    assert('strlen($typeExpression)>=1') ;
     assert('$position>=-1') ;
     $this->_soid =$soid ;
     $this->name =$name ;
     $this->classFragment=$classfragment ;
-    $this->type=$type ;
+    $this->typeDescription=parseTypeExpression($typeExpression) ;
+    if ($this->typeDescription == NULL) {
+      die('Invalid type expression '.$typeExpression) ;
+    }
     $this->positionInLabel=$position ;
   }
 }
 
+
+//--------------------------------------------------------------------------------
+//--- Type helpers ---------------------------------------------------------------
+//--------------------------------------------------------------------------------
+//
+// This is to deal with the current raw implementation of types
+// See the RepositoryInterfaces.php for the definition of TypeExpression and
+// TypeDeclaration.
+
+function /*TypeDescription?*/ parseTypeExpression( /*TypeExpression!*/ $expr) {
+  $nmatches = preg_match( TYPE_EXPRESSION_PATTERN, $expr, $matches) ;
+  if ($nmatches == 0 || count($matches) != 2+1)  {
+    return NULL ;  // invalid expression
+  } else {
+    $d = array() ;
+    $d['kind']=$matches[1] ;
+    $bodysegments=explode(',',$matches[2]) ;
+    switch ($d['kind']) {
+      
+      case ATOMIC_TYPE_KIND :
+        if (count($bodysegments)!=1) {
+          return NULL ;  // invalid expression
+        } else {
+          $d['base'] = $bodysegments[0];
+          return $d ;
+        }
+        break ;  // not reached
+        
+      case ENUMERATION_TYPE_KIND :
+        if (count($bodysegments)==0) {
+          return NULL ;  // invalid expression
+        } else {
+          $d['literals'] = $bodysegments ;
+          return $d ;
+        }
+        break ;  // not reached
+        
+      case REFERENCE_TYPE_KIND :
+        if (count($bodysegments)!=1) {
+          return NULL ;  // invalid expression
+        } else {
+          $d['base'] = $bodysegments[0];
+          return $d ;
+        }
+        break ;  // not reached
+              
+      case COLLECTION_TYPE_KIND :
+        if (count($bodysegments)!=2) {
+          return NULL ;  // invalid expression
+        } else {
+          $d['base'] = $bodysegments[0];
+          $d['inverse'] = $bodysegments[1];
+          return $d ;
+        }
+        break ;  // not reached
+        
+      default :
+        return NULL ; // invalid expression
+    }
+  }
+}
+
+function /*TypeExpression!*/ generateTypeExpression( /*TypeDescription!*/ $description) {
+  assert(isset($description)) ;
+  switch ($description['kind']) {
+    case ATOMIC_TYPE_KIND :
+      $body = $description['base'] ;
+      break ; 
+            
+    case ENUMERATION_TYPE_KIND :
+      $body = implode(',',$description['literals']) ;
+      break ; 
+      
+    case REFERENCE_TYPE_KIND :
+      $body = $description['base'] ;
+      break ; 
+
+    case COLLECTION_TYPE_KIND :
+      $body = $description['base'] .',' . $description['inverse'] ;
+      break ; 
+      
+    default :
+      die('incorrect type description. Kind is "'.$description['kind'].'"') ;
+  }
+  return $description['kind'].'('.$body.')' ;
+}
 
 
 //--------------------------------------------------------------------------------
