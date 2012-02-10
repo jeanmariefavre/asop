@@ -9,6 +9,5 @@
 	<buildpathentry kind="src" path="extensions/repositories/meta"/>
 	<buildpathentry kind="src" path="extensions/repositories/php"/>
 	<buildpathentry kind="src" path="extensions/repositories/sss"/>
-	<buildpathentry kind="src" path="libraries"/>
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
 </buildpath>

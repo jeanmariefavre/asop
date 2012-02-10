@@ -1,11 +1,11 @@
 <?php
-require_once("CsvRepository.php") ;
+require_once("CSVRepository.php") ;
 
 function /*IRepository*/ createRepository($protocol,$repname,$logger) {
-  $repository = new CsvReadRepository( 
+  $repository = new CSVReadRepository( 
                        URL_REPOSITORY.$protocol.'$'.$repname."/",
                        ABSPATH_CSV_ROOT,
-                       "repository-".$protocol.'$'.$repname.".txt"  ) ;
+                       ABSPATH_LOGS."repository-".$protocol.'$'.$repname.".txt"  ) ;
   $logger->log("csv::createRepository:: repository successfully opened") ;
   return $repository ;
 }

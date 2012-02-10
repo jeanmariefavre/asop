@@ -261,7 +261,7 @@ class MultiProtocolRepositoryServer implements IRepositoryServer {
   public function __construct($protocol,$repositoryname) {
     $this->protocol = $protocol;
     $this->repositoryName = $repositoryname ;
-    $this->logger = new Logger("server-".$this->protocol.".txt") ;
+    $this->logger = new Logger(ABSPATH_LOGS."server-".$this->protocol.".txt") ;
 
     // execute the global configuration file
     $conffile = ABSPATH_CONFIG."config.php" ;

@@ -341,7 +341,7 @@ class DatabasePerspective extends AbstractCachedHierarchicalClassFragmentsPerspe
     
   public function __construct(/*String!*/ $perspective_soid, 
                               DatabaseQueryRepository $database_repository) {
-    $this->databaseName = $database_repository->getDB()->dbname ;
+    $this->databaseName = $database_repository->getDB()->getName() ;
     parent::__construct(
       $perspective_soid,
       $database_repository,
@@ -432,7 +432,7 @@ class DatabaseInstanceSoidConcatenateKeyValuesMapper implements IDatabaseInstanc
     $soidparts=explode(HierarchicalSoidMapper::SOID_SEPARATOR,$s) ;
     assert('count($soidparts)>=3') ;
     $keymap=array() ;
-    $i=2 ;  // skip the soidparts[0] and soidparts[1] since they contains the dbname and tablename
+    $i=2 ;  // skip the soidparts[0] and soidparts[1] since they contains the databasename and tablename
     foreach($this->key_names as $keyname) {
       $keymap[$keyname] = $soidparts[$i] ;
       $i++ ;
@@ -455,7 +455,7 @@ class DatabaseInstanceSoidConcatenateKeyValuesMapper implements IDatabaseInstanc
   }
   
   public function __construct(DatabaseClassFragment $classfragment) {
-    $this->db_name = $classfragment->getPerspective()->getRepository()->getDB()->dbname ;
+    $this->db_name = $classfragment->getPerspective()->getRepository()->getDB()->getName() ;
     $this->table_name = $classfragment->getTableName() ;
     $this->key_names = $classfragment->getKeyColumns() ;
   }

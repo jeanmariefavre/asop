@@ -75,10 +75,7 @@ Content of this archive
     The core implementation of the repository server
 	Note that this directory contains no actual implementation.
 	Repository implementations are in the extensions/repositories directory
-  
-  /libraries
-    Some general purposes files
-    
+      
     		
   /extensions
     Contains extensions to enhance the feature of the repository server

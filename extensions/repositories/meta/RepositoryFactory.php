@@ -17,7 +17,7 @@ function /*IRepository*/ createRepository($protocol,$repname,$logger) {
   $repositoryWithModel = new SimpleStringBasedInstanceEmptyRepository( 
                          URL_REPOSITORY.'sss$'.$modelname."/",
                          $jsonmodelfile,
-                         "repository-sss$".$modelname.".txt"  ) ;  
+                         ABSPATH_LOGS."repository-sss$".$modelname.".txt"  ) ;  
   if (! $repositoryWithModel) {
     $logger->log("meta::createRepository:: creation of the model repository failed!") ;
   } else {
@@ -30,7 +30,7 @@ function /*IRepository*/ createRepository($protocol,$repname,$logger) {
                          URL_REPOSITORY.$protocol.'$'.$repname."/",
                          $repositoryWithModel,
                          $perspectivesoids,
-                         "repository-meta$".$repname.".txt" ) ;
+                         ABSPATH_LOGS."repository-meta$".$repname.".txt" ) ;
   $logger->log("meta::createRepository:: metamodel repository successfully opened") ;
   
   return $metaRepository ;  

@@ -10,7 +10,7 @@ function /*IRepository*/ createRepository($protocol,$repname,$logger) {
   $repository = new SimpleStringBasedInstanceEmptyRepository( 
                          URL_REPOSITORY.$protocol.'$'.$repname."/",
                          $jsonmodelfile,
-                         "repository-".$protocol.'$'.$repname.".txt"  ) ;
+                         ABSPATH_LOGS."repository-".$protocol.'$'.$repname.".txt"  ) ;
   $logger->log("sss::createRepository:: repository successfully opened") ;    
   return $repository ;  
 }

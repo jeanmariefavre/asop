@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# /repositoryname  
+# Create a sparql end point using this repository
+RewriteRule ^([a-z_0-9A-Z]+)/?$ SparqlEndpoint.php\?type=SparqlEndPoint&repositoryname=$1 [L,QSA]

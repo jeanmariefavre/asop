@@ -6,11 +6,11 @@ function /*IRepository*/ createRepository($protocol,$repname,$logger) {
   $dbserver=DATABASE_SERVER ;
   $user=DATABASE_SOCIAL_USER ;
   $password=DATABASE_SOCIAL_PASSWORD ;
-  $databaselog = "db-".$repname.".txt" ;
+  $databaselog = ABSPATH_LOGS."db-".$repname.".txt" ;
   $logger->log('db::createRepository:: opening database') ;
-  $db=new Database("mysql",$dbserver,$repname,$user,$password,$databaselog);
+  $db=new Database(new DatabaseAccount($repname,$user,$password,$dbserver,"mysql","3306"),$databaselog);
   if ($db->getError()) {
-    $logger->log('db::createRepository:: cannot open database "'.$repname.'" with user "'.user.'"') ;
+    $logger->log('db::createRepository:: cannot open database "'.$repname.'" with user "'.$user.'"') ;
     return NULL ;
   } else {
     $logger->log('db::createRepository:: new MysqlIntrospector') ;
@@ -20,7 +20,7 @@ function /*IRepository*/ createRepository($protocol,$repname,$logger) {
                          URL_REPOSITORY.$protocol.'$'.$repname."/",
                          $db,
                          $introspector, 
-                         "repository-".$protocol.'$'.$repname.".txt"  ) ;
+                         ABSPATH_LOGS."repository-".$protocol.'$'.$repname.".txt"  ) ;
     return $repository ;
   }
 }

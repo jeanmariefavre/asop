@@ -2,7 +2,7 @@
 
 require_once(ABSPATH_CORE.'AbstractRepository.php') ;
 require_once(ABSPATH_LIB.'Files.php') ;
-require_once(ABSPATH_LIB.'Csv.php') ;
+require_once(ABSPATH_LIB.'CSV.php') ;
 
 // Coding Scheme:
 //   perspective = directory (short) name in the csvroot
@@ -18,7 +18,7 @@ require_once(ABSPATH_LIB.'Csv.php') ;
 //--- Repository implementations -------------------------------------------------
 //--------------------------------------------------------------------------------
 
-class CsvReadRepository extends AbstractCachedReadRepository
+class CSVReadRepository extends AbstractCachedReadRepository
                                           implements IReadRepository {
   protected /*URL!*/ $url ;
   protected /*(URL|DirectoryName)!*/ $repositoryDirectory ;
@@ -36,7 +36,7 @@ class CsvReadRepository extends AbstractCachedReadRepository
     // check if this correspond to a directory
     $perspectivedir = $this->getRepositoryDirectory()."/".$perspective_soid ;
     if (isReadableDirectory($perspectivedir)) {
-      return new CsvPerspective($this,$perspective_soid) ;
+      return new CSVPerspective($this,$perspective_soid) ;
     } else {
       $this->log("  $perspectivedir is not a readable directory") ;
       return NULL ;
@@ -54,12 +54,12 @@ class CsvReadRepository extends AbstractCachedReadRepository
     // get the class fragment name and check that the corresponding file exist
     $class_fragment_segment = HierarchicalSoidMapper::classFragmentSoidSegment($class_fragment_soid) ;
     $csvfilename = $perspective->getPerspectiveDirectory().'/'.$class_fragment_segment.'.csv' ;
-    $csvfile =new CsvFile() ;
+    $csvfile =new CSVFile() ;
     $csvfile->load($csvfilename) ;
     if (! $csvfile->isValid()) {
       return NULL ;
     }
-    return new CsvClassFragment( $perspective, $csvfile) ;
+    return new CSVClassFragment( $perspective, $csvfile) ;
   }
   
   public function /*IInstanceFragment?*/ loadInstanceFragment(
@@ -92,7 +92,7 @@ class CsvReadRepository extends AbstractCachedReadRepository
     assert('$query===NULL') ;  // TODO Queries are are not implemented currently
     assert('strlen($class_fragment_soid)>=1') ;
     $this->log("loadAllInstanceFragmentSoids($class_fragment_soid)") ;
-    /*CsvClassFragment?*/$classfragment = $this->getClassFragment($class_fragment_soid) ;
+    /*CSVClassFragment?*/$classfragment = $this->getClassFragment($class_fragment_soid) ;
     if ($classfragment instanceof IClassFragment) {
       return $classfragment->getAllInstanceFragmentSoids();
     } else {
@@ -120,7 +120,7 @@ class CsvReadRepository extends AbstractCachedReadRepository
 
 
 
-class CsvPerspective extends AbstractCachedHierarchicalClassFragmentsPerspective
+class CSVPerspective extends AbstractCachedHierarchicalClassFragmentsPerspective
                      implements IPerspective {
   protected /*URL!*/ $perspectiveDirectory ;
   public function getPerspectiveDirectory() {
@@ -141,7 +141,7 @@ class CsvPerspective extends AbstractCachedHierarchicalClassFragmentsPerspective
     }
   }
   
-  public function __construct(CsvReadRepository $csvrepository, $perspectivename) {
+  public function __construct(CSVReadRepository $csvrepository, $perspectivename) {
     $this->perspectiveDirectory = $csvrepository->getRepositoryDirectory()."/".$perspectivename ;
     parent::__construct(
       /* soid = */        $perspectivename,      
@@ -155,16 +155,16 @@ class CsvPerspective extends AbstractCachedHierarchicalClassFragmentsPerspective
 //--- ClassFragment implementations ----------------------------------------------
 //--------------------------------------------------------------------------------
 
-class CsvClassModelFragment extends AbstractStoredAttributesClassModelFragment 
+class CSVClassModelFragment extends AbstractStoredAttributesClassModelFragment 
                              implements IClassModelFragment {
   // Link with csvfile
-  protected /*CsvFile!*/ $csvFile ;    
+  protected /*CSVFile!*/ $csvFile ;    
 
   public function __construct (IPerspective $perspective,
                                CSVFile $csvfile ) {
     assert('$csvfile->isValid()') ;
     $this->csvFile = $csvfile ;
-    $class_fragment_name = $csvfile->getCsvBaseName() ;
+    $class_fragment_name = $csvfile->getCSVBaseName() ;
     $class_fragment_soid = HierarchicalSoidMapper::buildClassFragmentSoid(
                                    $perspective->get_soid(),
                                    $class_fragment_name ) ;
@@ -178,14 +178,14 @@ class CsvClassModelFragment extends AbstractStoredAttributesClassModelFragment
     // add the attributes
     $header = $csvfile->getHeader() ;
     foreach ($header as $column) {
-      $attribute = new CsvAttribute($column,$this) ;
+      $attribute = new CSVAttribute($column,$this) ;
       $this->addAttribute($attribute) ;
     }
   }
 }
 
 
-class CsvClassFragment extends CsvClassModelFragment implements IClassFragment {
+class CSVClassFragment extends CSVClassModelFragment implements IClassFragment {
   public function /*Set[*]<IInstanceFragment> !*/ getAllInstanceFragments() {
     return array() ; /*TODO*/
   }
@@ -201,17 +201,17 @@ class CsvClassFragment extends CsvClassModelFragment implements IClassFragment {
     return $stringkeys ;
   }
 
-  public function /*CsvInstanceFragment?*/ getInstanceFragment($instance_soid) {
+  public function /*CSVInstanceFragment?*/ getInstanceFragment($instance_soid) {
     $this->log("getInstanceFragment($instance_soid)") ;
     $row = $this->csvFile->getRow($instance_soid) ;
-    if (!$row instanceof CsvInstanceFragment) {
+    if (!$row instanceof CSVInstanceFragment) {
       // in the csv file, only the shortname of attribute are used. We need to build attribute soid.
       $attributemap = array() ;
       $classfragmentsoid = $this->get_soid() ;
       foreach ($row as $columnname => $value) {
         $attributemap[HierarchicalSoidMapper::buildAttributeSoid($classfragmentsoid,$columnname)]=$value ;
       }
-      return new CsvInstanceFragment($instance_soid,$this,$attributemap) ;
+      return new CSVInstanceFragment($instance_soid,$this,$attributemap) ;
     } else {
       $this->log("no instance $instance_soid for ClassFragment ".$this->getName()) ;
       return NULL ;
@@ -229,7 +229,7 @@ class CsvClassFragment extends CsvClassModelFragment implements IClassFragment {
 //--------------------------------------------------------------------------------
 
 
-class CsvAttribute extends StandardAttribute implements IAttribute {
+class CSVAttribute extends StandardAttribute implements IAttribute {
   // Link with column 
   protected /*String!*/ $columnName ;
    
@@ -252,9 +252,9 @@ class CsvAttribute extends StandardAttribute implements IAttribute {
 //--------------------------------------------------------------------------------
 
 
-class CsvInstanceFragment extends StandardInstanceFragment {
+class CSVInstanceFragment extends StandardInstanceFragment {
   public function __construct(/*String!*/$soid,
-                     CsvClassFragment $classfragment,
+                     CSVClassFragment $classfragment,
                      /*Map*<String!,String!>!*/$attributemap) {
     parent::__construct($soid,$classfragment,$attributemap) ;
   }

@@ -14,8 +14,13 @@ ONGOING:
         decide if loadAttribute should go to IModelLoader and how to implement getAttribute
 			Data
 			
-		
-
+	RDF/SPARQL
+	  extensions/repositories/srdf
+	    here will be a implementation of the repository in as a rdfstore, with the soo ontology
+	  sparql
+	    allows to access to RDF store thanks to a sparql endpoint	
+        use a url of the form asop/sparql/<repositoryname>  for instance test
+        the API key is required to write in the database, it is "x"
 
 ==============================================================================
 TODO:

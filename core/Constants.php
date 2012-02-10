@@ -15,7 +15,7 @@ define ('_SOS',1) ;
 define('ABSPATH_BASE', dirname(dirname(__FILE__)).'/');
 define('ABSPATH_CORE', dirname(__FILE__).'/');
 define('ABSPATH_CONFIG', ABSPATH_BASE.'config/') ;
-define('ABSPATH_LIB',ABSPATH_BASE.'libraries/') ;
+define('ABSPATH_LIB',ABSPATH_BASE.'../megalib/') ;
 define('ABSPATH_LOGS',ABSPATH_BASE.'logs/') ;
 define('ABSPATH_EXTENSIONS',ABSPATH_BASE.'extensions/') ;
 define('ABSPATH_EXTENSIONS_REPOSITORIES',ABSPATH_EXTENSIONS.'repositories/');

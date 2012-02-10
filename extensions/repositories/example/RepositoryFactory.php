@@ -10,7 +10,7 @@ function /*IRepository*/ createRepository($protocol,$repname,$logger) {
                          // URL_REPOSITORY.$protocol.'$'.$repname."/",
                          // $rootdirectory,
                          //$rooturl,
-                         //"repository-".$protocol.'$'.$repname.".txt" 
+                         //ABSPATH_LOGS."repository-".$protocol.'$'.$repname.".txt" 
                           ) ;
   $logger->log("example::createRepository:: repository successfully opened") ;                 
   return $repository ;
